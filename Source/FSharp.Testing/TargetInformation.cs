@@ -4,13 +4,13 @@ namespace FSharp.Testing
 {
     public class TargetInformation<T>
     {
-        public TargetInformation(T target, FieldInfo backingField)
+        public TargetInformation(T target, PropertyInfo property)
         {
             Target = target;
-            BackingField = backingField;
+            Property = property;
         }
 
         public T Target { get; private set; }
-        public FieldInfo BackingField { get; private set; }
+        public PropertyInfo Property { get; private set; }
     }
 }
