@@ -23,7 +23,7 @@ If you've got NuGet installed on your machine it gets even easier:
 
 ## How to use it
 
-### Working with F# records in C#
+### Working with F# records in C# testing code
 
 You can easily manipulate F# records with the following "Set/To"-syntax:
 
