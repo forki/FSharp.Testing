@@ -22,19 +22,19 @@ namespace FSharp.Testing
         }
 
         /// <summary>
-        ///   Extracts the property name and creates a tuple with target object and backing field reference.
+        ///   Extracts the property name and creates a targetInformation with target object and backing field reference.
         /// </summary>
         /// <typeparam name = "T"></typeparam>
         /// <typeparam name = "TProperty"></typeparam>
         /// <param name = "target">The target.</param>
         /// <param name = "expression">The expression.</param>
         /// <returns></returns>
-        public static Tuple<T, FieldInfo> Set<T, TProperty>(this T target, Expression<Func<T, TProperty>> expression)
+        public static TargetInformation<T> Set<T, TProperty>(this T target, Expression<Func<T, TProperty>> expression)
         {
             var propertyName = expression.GetPropertyName();
             var field = GetBackingField<T>(propertyName);
 
-            return Tuple.Create(target, field);
+            return new TargetInformation<T>(target, field);
         }
 
         /// <summary>
@@ -64,17 +64,17 @@ namespace FSharp.Testing
         }
 
         /// <summary>
-        ///   Takes a tuple with target object and backing field reference and sets the given value on it.
+        ///   Takes a targetInformation with target object and backing field reference and sets the given value on it.
         /// </summary>
         /// <typeparam name = "T"></typeparam>
         /// <typeparam name = "TProperty"></typeparam>
-        /// <param name = "tuple">The tuple.</param>
+        /// <param name = "targetInformation">The targetInformation.</param>
         /// <param name = "value">The value.</param>
         /// <returns></returns>
-        public static T To<T, TProperty>(this Tuple<T, FieldInfo> tuple, TProperty value)
+        public static T To<T, TProperty>(this TargetInformation<T> targetInformation, TProperty value)
         {
-            tuple.Item2.SetValue(tuple.Item1, value);
-            return tuple.Item1;
+            targetInformation.BackingField.SetValue(targetInformation.Target, value);
+            return targetInformation.Target;
         }
 
         /// <summary>
