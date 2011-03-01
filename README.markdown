@@ -39,4 +39,4 @@ or with the following "With"-syntax:
 		.With(p => p.Property1, true)
 		.With(p => p.Property2, "test");
 
-Please note that this methods will not mutate your F# records. Instead new record copies will be created.
+Please note that this methods will not mutate your F# records. Instead they will create new record copies just as you would expect for immutable F# records.
