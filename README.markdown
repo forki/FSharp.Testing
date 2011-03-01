@@ -23,4 +23,20 @@ If you've got NuGet installed on your machine it gets even easier:
 
 ## How to use it
 
-Todo.
+### Working with F# records in C#
+
+You can easily manipulate F# records with the following "Set/To"-syntax:
+
+	var myRecord =
+	  myDefaultRecord
+		.Set(p => p.Property1).To(true)
+		.Set(p => p.Property2).To("test");
+
+or with the following "With"-syntax:
+
+	var myRecord =
+	  myDefaultRecord
+		.With(p => p.Property1, true)
+		.With(p => p.Property2, "test");
+
+Please note that this methods will mutate your F# records. This might break F# concepts and should not be used in production code.
