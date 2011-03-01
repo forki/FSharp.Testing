@@ -10,7 +10,7 @@
     <summary>@summary@</summary>
     <projectUrl>https://github.com/forki/FSharp.Testing</projectUrl>
     <licenseUrl>https://github.com/forki/FSharp.Testing/raw/dev/License.txt</licenseUrl>
-    <tags>tdd bdd testing unittest fakes mocks</tags>
+    <tags>tdd bdd testing unittest fakes mocks fsharp f#</tags>
     @dependencies@
   </metadata>  
 </package>
