@@ -12,4 +12,13 @@ namespace FSharp.Testing.Specs
 
         It should_reflect_the_new_value = () => _myClass.Property1.ShouldEqual(10);
     }
+
+    public class when_retrieving_the_property_name_of_a_property_in_a_record
+    {
+        static string _name;
+
+        Because of = () => _name = FSharpRecordExtensions.GetPropertyName<Records.MyRecord, int>(x => x.Property1);
+
+        It should_yield_Property1 = () => _name.ShouldEqual("Property1");
+    }
 }
