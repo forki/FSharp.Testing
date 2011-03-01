@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.FSharp.Core;
@@ -24,14 +25,36 @@ namespace FSharp.Testing
         }
 
         /// <summary>
-        /// Copies the record.
+        ///   Copies the record.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="record">The record.</param>
+        /// <typeparam name = "T"></typeparam>
+        /// <param name = "record">The record.</param>
         /// <returns></returns>
         public static T CopyRecord<T>(this T record)
         {
-            var values = FSharpValue.GetRecordFields(record, FSharpOption<BindingFlags>.None);
+            return CreateModifiedCopy<T, object>(record, null, null);
+        }
+
+        /// <summary>
+        ///   Creates a modified copy of the original object.
+        /// </summary>
+        /// <typeparam name = "T"></typeparam>
+        /// <typeparam name = "TProperty">The type of the property.</typeparam>
+        /// <param name = "record">The record.</param>
+        /// <param name = "propertyName">Name of the property.</param>
+        /// <param name = "value">The value.</param>
+        /// <returns></returns>
+        static T CreateModifiedCopy<T, TProperty>(T record, string propertyName, TProperty value)
+        {
+            var originalValues =
+                FSharpType.GetRecordFields(typeof (T), null)
+                    .Select(p => Tuple.Create(p, FSharpValue.GetRecordField(record, p)));
+
+            var values =
+                originalValues
+                    .Select(t => t.Item1.Name == propertyName ? value : t.Item2)
+                    .ToArray();
+
             return (T) FSharpValue.MakeRecord(typeof (T), values, FSharpOption<BindingFlags>.None);
         }
 
@@ -45,36 +68,7 @@ namespace FSharp.Testing
         /// <returns></returns>
         public static TargetInformation<T> Set<T, TProperty>(this T target, Expression<Func<T, TProperty>> expression)
         {
-            var propertyName = expression.GetPropertyName();
-            var field = GetBackingField<T>(propertyName);
-
-            return new TargetInformation<T>(target, field);
-        }
-
-        /// <summary>
-        ///   Gets the backing field for the given property.
-        /// </summary>
-        /// <typeparam name = "T"></typeparam>
-        /// <param name = "propertyName">Name of the property.</param>
-        /// <returns></returns>
-        public static FieldInfo GetBackingField<T>(string propertyName)
-        {
-            var fieldName = propertyName + "@";
-            var field = GetPrivateFieldInfo<T>(fieldName);
-
-            if (field == null)
-            {
-                fieldName = string.Format("<{0}>k__BackingField", propertyName);
-                field = GetPrivateFieldInfo<T>(fieldName);
-            }
-            if (field == null)
-                throw new Exception(string.Format("Backing field for property {0} could not be found.", propertyName));
-            return field;
-        }
-
-        static FieldInfo GetPrivateFieldInfo<T>(string fieldName)
-        {
-            return typeof (T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            return new TargetInformation<T>(target, expression.GetPropertyName());
         }
 
         /// <summary>
@@ -87,8 +81,7 @@ namespace FSharp.Testing
         /// <returns></returns>
         public static T To<T, TProperty>(this TargetInformation<T> targetInformation, TProperty value)
         {
-            targetInformation.BackingField.SetValue(targetInformation.Target, value);
-            return targetInformation.Target;
+            return CreateModifiedCopy(targetInformation.Target, targetInformation.PropertyName, value);
         }
 
         /// <summary>
@@ -103,16 +96,6 @@ namespace FSharp.Testing
         public static T With<T, TProperty>(this T target, Expression<Func<T, TProperty>> expression, TProperty value)
         {
             return target.Set(expression).To(value);
-        }
-
-        /// <summary>
-        ///   Gets the record fields.
-        /// </summary>
-        /// <param name = "type">The record type.</param>
-        /// <returns></returns>
-        public static PropertyInfo[] GetRecordFields(this Type type)
-        {
-            return FSharpType.GetRecordFields(type, null);
         }
     }
 }

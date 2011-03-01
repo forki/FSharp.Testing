@@ -1,19 +1,8 @@
-﻿using System.Linq;
-using System.Reflection;
-using FSharp.CodeSamples;
+﻿using FSharp.CodeSamples;
 using Machine.Specifications;
 
 namespace FSharp.Testing.Specs
 {
-    public class when_retrieving_record_fields
-    {
-        static PropertyInfo[] _fields;
-        Because of = () => _fields = typeof (Records.MyRecord).GetRecordFields();
-        It should_have_MyProperty2_field = () => _fields[0].Name.ShouldEqual("Property1");
-        It should_have_Property1_field = () => _fields[0].Name.ShouldEqual("Property1");
-        It should_have_two_fields = () => _fields.Count().ShouldEqual(2);
-    }
-
     public class when_copying_a_record
     {
         static Records.MyRecord _myRecord;
@@ -26,14 +15,16 @@ namespace FSharp.Testing.Specs
         It should_not_be_the_same_record = () => _myRecord.ShouldNotBeTheSameAs(_myOldRecord);
     }
 
-    public class when_setting_a_value_on_an_automatic_property_with_no_visible_setter_in_the_record
+    public class when_creating_a_slightly_modified_fsharp_record
     {
-        static Records.MyRecord _myRecord;
-        Establish context = () => _myRecord = new Records.MyRecord(0, "");
+        static Records.MyRecord _oldRecord;
+        static Records.MyRecord _newRecord;
+        Establish context = () => _oldRecord = new Records.MyRecord(0, "");
 
-        Because of = () => _myRecord.Set(x => x.Property1).To(10);
+        Because of = () => _newRecord = _oldRecord.Set(x => x.Property1).To(10);
 
-        It should_reflect_the_new_value = () => _myRecord.Property1.ShouldEqual(10);
+        It should_reflect_the_new_value = () => _newRecord.Property1.ShouldEqual(10);        
+        It should_not_change_the_old_record = () => _oldRecord.Property1.ShouldEqual(0);        
     }
 
     public class when_retrieving_the_property_name_of_a_property_in_a_record

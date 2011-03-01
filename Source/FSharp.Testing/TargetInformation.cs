@@ -1,16 +1,14 @@
-﻿using System.Reflection;
-
-namespace FSharp.Testing
+﻿namespace FSharp.Testing
 {
     public class TargetInformation<T>
     {
-        public TargetInformation(T target, FieldInfo backingField)
+        public TargetInformation(T target, string propertyName)
         {
             Target = target;
-            BackingField = backingField;
+            PropertyName = propertyName;
         }
 
         public T Target { get; private set; }
-        public FieldInfo BackingField { get; private set; }
+        public string PropertyName { get; private set; }
     }
 }

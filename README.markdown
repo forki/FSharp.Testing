@@ -25,18 +25,18 @@ If you've got NuGet installed on your machine it gets even easier:
 
 ### Working with F# records in C# testing code
 
-You can easily manipulate F# records with the following "Set/To"-syntax:
+You can easily create slightly modified F# records with the following "Set/To"-syntax:
 
-	var myRecord =
+	var myNewRecord =
 	  myDefaultRecord
 		.Set(p => p.Property1).To(true)
 		.Set(p => p.Property2).To("test");
 
 or with the following "With"-syntax:
 
-	var myRecord =
+	var myNewRecord =
 	  myDefaultRecord
 		.With(p => p.Property1, true)
 		.With(p => p.Property2, "test");
 
-Please note that this methods will mutate your F# records. This might break F# concepts and should not be used in production code.
+Please note that this methods will not mutate your F# records. Instead new record copies will be created.
