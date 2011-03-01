@@ -99,7 +99,7 @@ Target "BuildNuGet" (fun _ ->
             Version = version                        
             OutputPath = nugetDir
             Description = description
-            Description = ["FSharp.Core","2.0.0.0"]
+            Dependencies = ["FSharp.Core","2.0.0.0"]
             AccessKey = getBuildParamOrDefault "nugetkey" ""
             Publish = hasBuildParam "nugetkey" })
         "fsharp.testing.nuspec"
