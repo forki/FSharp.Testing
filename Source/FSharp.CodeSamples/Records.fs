@@ -2,5 +2,5 @@
 
 type MyRecord = {
     Property1: int
-    Property2: string
+    MyProperty2: string
 }

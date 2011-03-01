@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.FSharp.Core;
+using Microsoft.FSharp.Reflection;
 
 namespace FSharp.Testing
 {
@@ -19,6 +21,18 @@ namespace FSharp.Testing
         public static string GetPropertyName<T, TProperty>(this Expression<Func<T, TProperty>> expression)
         {
             return ((MemberExpression) expression.Body).Member.Name;
+        }
+
+        /// <summary>
+        /// Copies the record.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="record">The record.</param>
+        /// <returns></returns>
+        public static T CopyRecord<T>(this T record)
+        {
+            var values = FSharpValue.GetRecordFields(record, FSharpOption<BindingFlags>.None);
+            return (T) FSharpValue.MakeRecord(typeof (T), values, FSharpOption<BindingFlags>.None);
         }
 
         /// <summary>
@@ -89,6 +103,16 @@ namespace FSharp.Testing
         public static T With<T, TProperty>(this T target, Expression<Func<T, TProperty>> expression, TProperty value)
         {
             return target.Set(expression).To(value);
+        }
+
+        /// <summary>
+        ///   Gets the record fields.
+        /// </summary>
+        /// <param name = "type">The record type.</param>
+        /// <returns></returns>
+        public static PropertyInfo[] GetRecordFields(this Type type)
+        {
+            return FSharpType.GetRecordFields(type, null);
         }
     }
 }
