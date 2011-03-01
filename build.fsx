@@ -89,7 +89,8 @@ Target "BuildNuGet" (fun _ ->
     CleanDirs [nugetDir; nugetLibDir; nugetDocsDir]
         
     XCopy docsDir nugetDocsDir
-    [buildDir + "FSharp.Testing.dll"]
+    [buildDir + "FSharp.Core.dll"
+     buildDir + "FSharp.Testing.dll"]
         |> CopyTo nugetLibDir
 
     NuGet (fun p -> 
