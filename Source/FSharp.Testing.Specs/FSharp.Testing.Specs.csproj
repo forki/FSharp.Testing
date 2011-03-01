@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Machine.Specifications">
       <HintPath>..\packages\Machine.Specifications.0.3.0.0\lib\40\Machine.Specifications.dll</HintPath>
     </Reference>
@@ -43,13 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="When_extracting_property_name.cs" />
+    <Compile Include="RecordSetterSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FSharp.CodeSamples\FSharp.CodeSamples.fsproj">
+      <Project>{2299F792-98ED-4EDA-A9E4-E95D2A378505}</Project>
+      <Name>FSharp.CodeSamples</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSharp.Testing\FSharp.Testing.csproj">
       <Project>{B3A7C08B-517C-47F2-8D3A-571733AC724A}</Project>
       <Name>FSharp.Testing</Name>
