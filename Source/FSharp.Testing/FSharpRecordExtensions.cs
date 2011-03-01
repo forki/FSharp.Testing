@@ -21,7 +21,19 @@ namespace FSharp.Testing
         /// <returns></returns>
         public static string GetPropertyName<T, TProperty>(this Expression<Func<T, TProperty>> expression)
         {
-            return ((MemberExpression) expression.Body).Member.Name;
+            return GetProperty(expression).Name;
+        }
+
+        /// <summary>
+        ///   Gets the property.
+        /// </summary>
+        /// <typeparam name = "T"></typeparam>
+        /// <typeparam name = "TProperty">The type of the property.</typeparam>
+        /// <param name = "expression">The expression.</param>
+        /// <returns></returns>
+        public static PropertyInfo GetProperty<T, TProperty>(this Expression<Func<T, TProperty>> expression)
+        {
+            return (PropertyInfo) ((MemberExpression) expression.Body).Member;
         }
 
         /// <summary>
@@ -41,10 +53,10 @@ namespace FSharp.Testing
         /// <typeparam name = "T"></typeparam>
         /// <typeparam name = "TProperty">The type of the property.</typeparam>
         /// <param name = "record">The record.</param>
-        /// <param name = "propertyName">Name of the property.</param>
+        /// <param name = "property">Name of the property.</param>
         /// <param name = "value">The value.</param>
         /// <returns></returns>
-        static T CreateModifiedCopy<T, TProperty>(T record, string propertyName, TProperty value)
+        static T CreateModifiedCopy<T, TProperty>(T record, PropertyInfo property, TProperty value)
         {
             var originalValues =
                 FSharpType.GetRecordFields(typeof (T), null)
@@ -52,7 +64,7 @@ namespace FSharp.Testing
 
             var values =
                 originalValues
-                    .Select(t => t.Item1.Name == propertyName ? value : t.Item2)
+                    .Select(t => t.Item1 == property ? value : t.Item2)
                     .ToArray();
 
             return (T) FSharpValue.MakeRecord(typeof (T), values, FSharpOption<BindingFlags>.None);
@@ -68,7 +80,7 @@ namespace FSharp.Testing
         /// <returns></returns>
         public static TargetInformation<T> Set<T, TProperty>(this T target, Expression<Func<T, TProperty>> expression)
         {
-            return new TargetInformation<T>(target, expression.GetPropertyName());
+            return new TargetInformation<T>(target, expression.GetProperty());
         }
 
         /// <summary>
@@ -81,7 +93,7 @@ namespace FSharp.Testing
         /// <returns></returns>
         public static T To<T, TProperty>(this TargetInformation<T> targetInformation, TProperty value)
         {
-            return CreateModifiedCopy(targetInformation.Target, targetInformation.PropertyName, value);
+            return CreateModifiedCopy(targetInformation.Target, targetInformation.Property, value);
         }
 
         /// <summary>

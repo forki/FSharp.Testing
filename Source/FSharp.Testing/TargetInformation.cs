@@ -1,14 +1,16 @@
-﻿namespace FSharp.Testing
+﻿using System.Reflection;
+
+namespace FSharp.Testing
 {
     public class TargetInformation<T>
     {
-        public TargetInformation(T target, string propertyName)
+        public TargetInformation(T target, PropertyInfo property)
         {
             Target = target;
-            PropertyName = propertyName;
+            Property = property;
         }
 
         public T Target { get; private set; }
-        public string PropertyName { get; private set; }
+        public PropertyInfo Property { get; private set; }
     }
 }
