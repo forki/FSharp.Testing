@@ -31,7 +31,7 @@ namespace FSharp.Testing.Specs
     {
         static string _name;
 
-        Because of = () => _name = FSharpRecordExtensions.GetPropertyName<Records.MyRecord, int>(x => x.Property1);
+        Because of = () => _name = ReflectionExtensions.GetPropertyName<Records.MyRecord, int>(x => x.Property1);
 
         It should_yield_Property1 = () => _name.ShouldEqual("Property1");
     }
