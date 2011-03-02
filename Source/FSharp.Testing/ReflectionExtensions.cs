@@ -7,10 +7,7 @@ using Microsoft.FSharp.Reflection;
 
 namespace FSharp.Testing
 {
-    ///<summary>
-    ///  Extensions for FSharp Records
-    ///</summary>
-    public static class FSharpRecordExtensions
+    public static class ReflectionExtensions
     {
         /// <summary>
         ///   Gets the name of the property.
