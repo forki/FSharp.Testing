@@ -48,6 +48,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BackingFields.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="TargetInformation.cs" />
   </ItemGroup>
